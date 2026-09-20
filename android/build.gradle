@@ -1,0 +1,71 @@
+buildscript {
+    ext {
+        buildToolsVersion = "36.0.0"
+        minSdkVersion = 24
+        compileSdkVersion = 36
+        targetSdkVersion = 36
+        ndkVersion = "28.0.13004108"
+        kotlinVersion = "2.1.20"
+    }
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.android.tools.build:gradle")
+        classpath("com.facebook.react:react-native-gradle-plugin")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
+    }
+}
+
+apply plugin: "com.facebook.react.rootproject"
+
+// =============================================================================
+// Fix: Force all subprojects to use the same Kotlin stdlib version
+// This prevents version mismatch errors with third-party libraries
+// =============================================================================
+subprojects {
+    configurations.configureEach {
+        resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == 'org.jetbrains.kotlin') {
+                details.useVersion rootProject.ext.kotlinVersion
+            }
+        }
+    }
+}
+
+// =============================================================================
+// Fix: Node.js not found when running from Android Studio
+// Android Studio doesn't inherit terminal PATH, so we need to explicitly set it
+// =============================================================================
+def nodePath = "node"
+if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
+    if (file("C:/Program Files/nodejs/node.exe").exists()) {
+        nodePath = "C:/Program Files/nodejs/node.exe"
+    }
+} else {
+    if (file("/opt/homebrew/bin/node").exists()) {
+        nodePath = "/opt/homebrew/bin/node"
+    } else if (file("/usr/local/bin/node").exists()) {
+        nodePath = "/usr/local/bin/node"
+    } else if (file("/usr/bin/node").exists()) {
+        nodePath = "/usr/bin/node"
+    }
+}
+
+if (file(nodePath).exists()) {
+    def nodeDir = file(nodePath).parent
+    // Set NODE_BINARY globally so React Native gradle plugin can find it
+    ext.NODE_BINARY = nodePath
+
+    // Fix PATH for codegen tasks using taskGraph
+    gradle.taskGraph.whenReady { taskGraph ->
+        def fullPath = "${nodeDir}${File.pathSeparator}" + (System.getenv("PATH") ?: "")
+        taskGraph.allTasks.each { task ->
+            if (task instanceof Exec) {
+                task.environment("PATH", fullPath)
+                task.environment("NODE_BINARY", nodePath)
+            }
+        }
+    }
+}
