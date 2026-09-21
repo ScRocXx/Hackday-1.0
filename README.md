@@ -1,7 +1,7 @@
 <div align="center">
   <img width="140" height="140" alt="Pinpointer Logo" src="https://github.com/user-attachments/assets/ae29e1af-6a19-4ac9-9a2e-f235f9febb9b" />
 
-  # PinPointer
+  # Pinpointer
   
   ### A 100% Offline Search Engine & Intelligent Vault for Trapped On-Device Media
   
@@ -29,7 +29,7 @@
 ## 📱 Quick Test: Try the Pre-built Android APK
 
 > [!TIP]
-> **PinPointer is not a UI prototype — it is a production-compiled Android app.**  
+> **Pinpointer is not a UI prototype — it is a production-compiled Android app.**  
 > It bundles our native modules, offline quantized Whisper speech models, and custom SQLite FTS5 engine so you can test it directly in Airplane Mode on your phone.
 
 - 📥 **Direct APK Download**: [**`Pinpointer-v1.1.apk`**](https://github.com/ScRocXx/Hackday-1.0/releases/download/app/Pinpointer-v1.1.apk) (~230 MB, fully self-contained)
@@ -38,7 +38,7 @@
 
 ---
 
-## 📖 The Story: Why We Built PinPointer
+## 📖 The Story: Why We Built Pinpointer
 
 ### The Everyday Reality of "Dark Data"
 Think about how documents actually move through your life today, especially across India:
@@ -72,13 +72,13 @@ Why hasn't this been solved?
 3. **Naive AI Drains Batteries**: If an app naively spins up heavy deep learning models across 10,000 photos in your gallery, your phone overheats and your battery dies by noon.
 4. **The Language Barrier**: Real people don't always search in immaculate English. An Indian user searches for *"bijli bill"*, speaks in Hindi, or types in Hinglish. Most search engines have no idea that *"bijli"* and *"electricity"* are the exact same thing.
 
-We built **PinPointer** to solve this permanently—with an **Internet-Zero philosophy**.
+We built **Pinpointer** to solve this permanently—with an **Internet-Zero philosophy**.
 
 ---
 
-## 💡 How PinPointer Works: An Engineering Journey
+## 💡 How Pinpointer Works: An Engineering Journey
 
-Instead of treating your device as a dumb terminal that relies on cloud servers, PinPointer turns your phone into an autonomous intelligence vault. 
+Instead of treating your device as a dumb terminal that relies on cloud servers, Pinpointer turns your phone into an autonomous intelligence vault. 
 
 Here is what happens when documents and queries flow through the app:
 
@@ -118,19 +118,19 @@ graph TD
 ```
 
 ### 1. The Battery-Aware Vision Pipeline
-When you sync or scan an image, PinPointer doesn't blindly throw power-hungry neural networks at it:
+When you sync or scan an image, Pinpointer doesn't blindly throw power-hungry neural networks at it:
 - **Smart Downsampling**: It resizes high-resolution camera photos down to an optimized 1024×1024 frame. This reduces OCR latency from seconds to **~180ms** while preserving crisp character legibility.
 - **Parallel Bilingual OCR**: It runs Google ML Kit Latin and Devanagari models simultaneously.
 - **The Early-Exit Breakthrough**: The instant clean text is identified, **the pipeline halts immediately**. It skips heavy multi-label object recognition on over 90% of documents. Your phone stays cool, GPU/NPU wakeups are prevented, and battery life is preserved.
 - **Noise Filtering**: OCR garbage from blurry photos or textures is caught by an alphanumeric ratio heuristic (<30% clean text is automatically rejected).
 
 ### 2. The 5-Phase PDF Engine
-PDFs are notorious for being inconsistent. Some are digitally generated; others are camera photos wrapped in a PDF envelope. PinPointer treats them with a dedicated 5-phase pipeline:
-- **Native Byte Parsing**: For digital PDFs (bank statements, flight tickets, invoices), PinPointer parses the raw internal PDF text operators (`BT`...`ET`, `Tj`/`TJ`) directly in **~50ms per page** without ever rasterizing an image or invoking AI.
+PDFs are notorious for being inconsistent. Some are digitally generated; others are camera photos wrapped in a PDF envelope. Pinpointer treats them with a dedicated 5-phase pipeline:
+- **Native Byte Parsing**: For digital PDFs (bank statements, flight tickets, invoices), Pinpointer parses the raw internal PDF text operators (`BT`...`ET`, `Tj`/`TJ`) directly in **~50ms per page** without ever rasterizing an image or invoking AI.
 - **Native Hardware Rasterization**: If a PDF is a scanned photocopy, Android's native `android.graphics.pdf.PdfRenderer` converts pages 1–3 into JPEGs and hands them to the vision pipeline.
 
 ### 3. Turning Messy Files into Human Knowledge
-No user remembers what `DOC-20240918-WA0012.pdf` was. PinPointer runs a pure-JavaScript rule-based classifier in **<1ms**:
+No user remembers what `DOC-20240918-WA0012.pdf` was. Pinpointer runs a pure-JavaScript rule-based classifier in **<1ms**:
 - It recognizes **20 distinct Indian document categories** (Aadhaar cards, PAN cards, voter IDs, driving licenses, bank statements, salary slips, tax returns/Form 16, invoices, receipts, marksheets, electricity bills, medical reports, and more).
 - It extracts a **Smart Title**: that mysterious WhatsApp file is filed in your Document Vault as *"BSES Rajdhani Electricity Bill"* or *"HDFC Bank Statement"*.
 
@@ -141,7 +141,7 @@ India is inherently multilingual:
 - **Zero-LLM Overhead**: Everything is deterministic rule-based mapping—meaning zero hallucination, zero token cost, and instantaneous speed.
 
 ### 5. Hands-Free On-Device Voice Intelligence
-Touch typing on mobile can be frustrating. PinPointer embeds a quantized INT8 Whisper Base speech-to-text model running via `sherpa-onnx` and native JNI bindings. 
+Touch typing on mobile can be frustrating. Pinpointer embeds a quantized INT8 Whisper Base speech-to-text model running via `sherpa-onnx` and native JNI bindings. 
 - You tap the microphone and say: *"Pichla bijli bill dikhao"* or *"Find my car insurance"*.
 - Your voice is captured as 16kHz PCM audio and transcribed locally on your processor in **~1.1 seconds** with zero Wi-Fi or cellular connection.
 
@@ -162,7 +162,7 @@ All enriched tokens, Soundex phonetic codes, and smart titles live in a local SQ
 ```text
 🏥 In Hospital Basements & Emergency Rooms
    A family member needs a past cardiology prescription or blood group report. Cellular data 
-   is blocked by concrete walls. PinPointer searches and opens the prescription instantly.
+   is blocked by concrete walls. Pinpointer searches and opens the prescription instantly.
 
 🌾 In Rural Banking, Field Work & Micro-Lending
    A loan officer is verifying KYC documents, land records, or ration cards in a remote village 
@@ -179,9 +179,9 @@ All enriched tokens, Soundex phonetic codes, and smart titles live in a local SQ
 
 ---
 
-## 📊 How PinPointer Compares
+## 📊 How Pinpointer Compares
 
-| Dimension | Cloud AI (Vision APIs) | DigiLocker | Apple Intelligence | **PinPointer** |
+| Dimension | Cloud AI (Vision APIs) | DigiLocker | Apple Intelligence | **Pinpointer** |
 |---|:---:|:---:|:---:|:---:|
 | **Works 100% Offline** | ❌ Never | ❌ Requires Active Internet | ⚠️ Hybrid Cloud Fallback | ✅ **100% On-Device** |
 | **Where Data is Processed** | 3rd-Party Remote Cloud | Government Server | On-Device + Cloud | ✅ **Exclusively on Phone** |
@@ -208,7 +208,7 @@ All enriched tokens, Soundex phonetic codes, and smart titles live in a local SQ
 
 ## 💻 Tech Stack & Key Libraries
 
-| Layer | Technology | Purpose in PinPointer |
+| Layer | Technology | Purpose in Pinpointer |
 |---|---|---|
 | **Core Framework** | React Native `0.83.1` (React `19.2.0`, TypeScript `5.9.2`) | Cross-platform UI architecture and reactive state management |
 | **Local Database** | `react-native-quick-sqlite` | High-performance C-based SQLite 3 engine with FTS5 and WAL mode |
@@ -335,7 +335,3 @@ Hackday-1.0/
    ```
 
 ---
-
-<div align="center">
-  <sub><strong>PinPointer</strong> — Indexed. Offline. Yours.</sub>
-</div>
