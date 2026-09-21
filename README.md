@@ -3,7 +3,7 @@
 
   # PinPointer
   
-  ### Search Trapped Text in Screenshots, Photos & PDFs — 100% Offline
+  ### A 100% Offline Search Engine & Intelligent Vault for Trapped On-Device Media
   
   <p align="center">
     <a href="https://github.com/ScRocXx/Hackday-1.0/releases/download/app/Pinpointer-v1.1.apk">
@@ -26,236 +26,289 @@
 
 ---
 
-## ⚡ Try the App (Pre-built Android APK)
+## 📱 Quick Test: Try the Pre-built Android APK
 
 > [!TIP]
-> **PinPointer is fully functional on real Android hardware — not just a UI mockup.**  
-> Test it in Airplane Mode with your own camera photos, downloaded PDFs, and voice queries.
+> **PinPointer is not a UI prototype — it is a production-compiled Android app.**  
+> It bundles our native modules, offline quantized Whisper speech models, and custom SQLite FTS5 engine so you can test it directly in Airplane Mode on your phone.
 
-- 📦 **Download Link**: [**`Pinpointer-v1.1.apk`**](https://github.com/ScRocXx/Hackday-1.0/releases/download/app/Pinpointer-v1.1.apk) (~230 MB, includes bundled offline Whisper STT model)
-- 🏷️ **Release Tag**: [`app`](https://github.com/ScRocXx/Hackday-1.0/releases/tag/app)
-- 📱 **Requirements**: Android 10+ (tested on entry-level MediaTek/Unisoc 3GB–4GB RAM phones up to flagship devices).
+- 📥 **Direct APK Download**: [**`Pinpointer-v1.1.apk`**](https://github.com/ScRocXx/Hackday-1.0/releases/download/app/Pinpointer-v1.1.apk) (~230 MB, fully self-contained)
+- 🏷️ **GitHub Release**: [`Tag: app`](https://github.com/ScRocXx/Hackday-1.0/releases/tag/app)
+- 📲 **Compatibility**: Runs smoothly on Android 10+ (tested on low-end 3GB–4GB RAM MediaTek & Unisoc devices up to modern flagships).
 
 ---
 
-## 🔴 The Problem: Everyday "Dark Data" in India
+## 📖 The Story: Why We Built PinPointer
 
-A vast amount of critical personal documentation in India lives as unsearchable images and randomly named files:
+### The Everyday Reality of "Dark Data"
+Think about how documents actually move through your life today, especially across India:
+
+A pharmacist WhatsApps you a photo of a doctor's handwritten prescription. You take a quick snapshot of your electricity bill to use as address proof. You download a college marksheet, photograph an auto repair receipt, or save a screenshot of an emergency contact. 
+
+Within weeks, your phone's internal storage looks like this:
 
 ```text
 📁 Internal Storage / WhatsApp / Downloads
-├── 📄 DOC-20240918-WA0012.pdf   <-- Actually a doctor's prescription!
-├── 🖼️ IMG_20240812_WA0411.jpg   <-- Electricity bill (needed for address proof)
-├── 📄 scan_0048.pdf             <-- Land registry agreement
+├── 📄 DOC-20240918-WA0012.pdf   <-- Crucial prescription you need right now
+├── 🖼️ IMG_20240812_WA0411.jpg   <-- Electricity bill for verification
+├── 📄 scan_0048.pdf             <-- Land registry deed
 └── 🖼️ IMG_9121.jpg              <-- Aadhaar card scan
 ```
 
-### Why Existing Solutions Fall Short
-1. **Unsearchable Scans & File Names**: WhatsApp names files cryptically (`DOC-2024***-WA0012.pdf`). Finding a past medical report or fee receipt means manually opening dozens of files.
-2. **Cloud Isn't Always an Option**:
-   - Free cloud storage tiers fill up quickly and halt automatic syncing.
-   - Standard gallery apps organize photos by date or face, completely ignoring text inside PDFs and screenshots.
-   - In hospitals, basement clinics, rural bank branches, or government offices, internet connectivity often drops to zero.
-3. **Severe Privacy Risks**:
-   - Uploading Aadhaar cards, PAN cards, bank statements, and health records to third-party cloud AI APIs creates regulatory and personal security risks.
-4. **No Native Hindi / Hinglish Search**:
-   - Cloud search solutions rarely handle bilingual Indian contexts where a user searches for *"bijli bill"* to find an electricity invoice, or types in Romanized Hindi.
+The text is right there, frozen inside image pixels and flattened PDF streams. But to your phone's operating system, it is completely invisible. It is **"Dark Data"**.
+
+### The Panic Moment
+Now picture the moment you actually need one of those documents:
+- You are standing at a hospital billing counter, in a clinic basement where mobile signal drops to zero.
+- You are at a government office or rural bank branch trying to show your land paper or PAN card.
+- You are trying to help an elderly parent locate last month's utility bill.
+
+You open your gallery and scroll through thousands of vacation photos, memes, and downloaded graphics. You search for *"prescription"*, and your phone says **0 results found**.
+
+### The Dilemma
+Why hasn't this been solved?
+1. **Cloud APIs are a Privacy Minefield**: Uploading your Aadhaar card, PAN card, tax returns, and medical diagnoses to third-party cloud AI servers is a massive privacy risk.
+2. **The Cloud Fails When You Need It Most**: When connectivity drops inside basements, subways, or remote towns, cloud solutions vanish.
+3. **Naive AI Drains Batteries**: If an app naively spins up heavy deep learning models across 10,000 photos in your gallery, your phone overheats and your battery dies by noon.
+4. **The Language Barrier**: Real people don't always search in immaculate English. An Indian user searches for *"bijli bill"*, speaks in Hindi, or types in Hinglish. Most search engines have no idea that *"bijli"* and *"electricity"* are the exact same thing.
+
+We built **PinPointer** to solve this permanently—with an **Internet-Zero philosophy**.
 
 ---
 
-## 💡 What PinPointer Does
+## 💡 How PinPointer Works: An Engineering Journey
 
-**PinPointer** is a **100% offline, privacy-first search gallery** that indexes text inside screenshots, photos, camera scans, and PDFs right on your phone.
+Instead of treating your device as a dumb terminal that relies on cloud servers, PinPointer turns your phone into an autonomous intelligence vault. 
 
-- ✈️ **100% Offline Search**: Works entirely in Airplane Mode. Queries return in **<15ms**.
-- ⚡ **Smart PDF + OCR Pipeline**: Digital PDFs are parsed via direct byte-stream extraction in **~50ms**. OCR is only triggered as a fallback for scanned images.
-- 🗣️ **English + Hindi + Hinglish Voice & Text Search**: Search naturally using English, Hindi, or Hinglish. Searching *"bijli"* or *"electricity"* surfaces the same bill.
-- 🏷️ **Automatic Document Classification**: Identifies 20+ common Indian document types (Aadhaar, PAN, marksheets, receipts, bills) and assigns meaningful Smart Titles automatically.
-- 🛡️ **Sovereign PII Redaction**: Aligns with India's **DPDP Act 2023** by irreversibly masking Aadhaar, PAN, and phone numbers before writing anything to disk.
-- 🔋 **Battery-Aware 90% Compute Bypass**: Sequential early-exit pipeline stops processing as soon as clean text is detected, bypassing heavy vision models and preventing GPU/NPU battery drain.
-
----
-
-## 📊 Feature Comparison Matrix
-
-| Capability | Cloud AI (Vision APIs) | DigiLocker | Apple Intelligence | **PinPointer** |
-|---|:---:|:---:|:---:|:---:|
-| **Works 100% Offline** | ❌ Never | ❌ Needs Internet | ⚠️ Partial / Cloud Fallback | ✅ **100% On-Device** |
-| **Data Processing Location** | Remote 3rd-Party Cloud | Government Cloud | Hybrid Cloud / Device | ✅ **Exclusively on Phone** |
-| **Low-End Hardware (3–4GB RAM)** | ⚠️ App only (heavy cloud) | ⚠️ Web-reliant | ❌ Requires Flagship A17+ | ✅ **Optimized for 3–4GB RAM** |
-| **Hindi / Hinglish Search** | ⚠️ Service dependent | ❌ Exact text only | ⚠️ Limited Indian Context | ✅ **Built-in Transliteration & Synonyms** |
-| **Messy WhatsApp Files & Photos** | ⚠️ Manual upload required | ❌ Government issued only | ⚠️ Photos only | ✅ **Automatic Auto-Classification** |
-| **Unified Search (PDFs + Photos)** | ⚠️ Separate tools | ❌ PDFs only | ⚠️ Separate silos | ✅ **Single Instant Search Bar** |
-| **Infrastructure Cost at Scale** | 📈 ~$1.50 / 1K pages | N/A | High device cost | ✅ **$0.00 / Month Server Cost** |
-
----
-
-## 🏢 Real-World, Low-Connectivity Use Cases
-
-```text
-🏥 Hospitals & Pharmacies
-   Find past prescriptions or lab reports in hospital basements where mobile signal is dead.
-
-🌾 Rural Banking & Micro-Lending
-   Field agents can verify KYC documents, land deeds, and ration cards without relying on cellular towers.
-
-👴 Parents & Elderly Users
-   Avoid folder navigation entirely; search or use voice: "Pichla bijli bill dikhao."
-
-⚖️ Privacy-Sensitive Professionals
-   Lawyers, accountants, and doctors keep confidential files strictly on-device with zero leak vector.
-```
-
----
-
-## 🏗️ System Architecture & Workflow
+Here is what happens when documents and queries flow through the app:
 
 ```mermaid
 graph TD
-    A[User Storage / Camera / Microphone] --> B{Input Type}
+    A[Camera / Gallery / Downloads / WhatsApp] --> B{File Type}
     
-    B -->|Photos & Screenshots| C[Vision Pipeline]
-    B -->|PDF Documents| D[Document Pipeline]
-    B -->|Voice Query| E[Sherpa-ONNX Whisper INT8]
-    
-    subgraph Vision Pipeline
-        C --> C1[1024px Dynamic Downsampling]
-        C1 --> C2[Dual Parallel OCR: Latin + Devanagari]
-        C2 --> C3{Clean Text Detected?}
-        C3 -->|Yes| C4[Early Exit & Soundex Phonetic Index]
-        C3 -->|No / Garbage Text| C5[Fallback: Image Labeling]
+    subgraph 1. Intelligent Ingestion
+        B -->|Image / Screenshot| C[1024px Dynamic Downsampling]
+        C --> D[Parallel Dual OCR: Latin + Devanagari]
+        D --> E{Clean Text Found?}
+        E -->|Yes: 90%+ Cases| F[Early Exit: Halt Processing & Save Battery]
+        E -->|No: Blurry / Scenery| G[Fallback: ML Kit Image Labeling]
+        
+        B -->|PDF Document| H{Digital Text Stream?}
+        H -->|Yes| I[Direct Byte Extraction in ~50ms]
+        H -->|No: Scanned Photocopy| J[Android Native PdfRenderer to JPEG]
+        J --> C
     end
     
-    subgraph Document Pipeline
-        D --> D1[Phase 1: Metadata Extraction]
-        D1 --> D2{Phase 2: Digital PDF Stream?}
-        D2 -->|Yes| D3[Direct Byte Text Extraction ~50ms]
-        D2 -->|No: Scanned PDF| D4[Phase 3: Android Native PdfRenderer]
-        D4 --> C1
-        D3 --> D5[Phase 4: Document Classifier & Smart Title]
+    subgraph 2. Local Enrichment & Redaction
+        F --> K[Deterministic Devanagari to Hinglish Transliteration]
+        I --> K
+        K --> L[20-Category Zero-ML Document Classifier]
+        L --> M[Smart Title Assignment: e.g. 'SBI Account Statement']
+        M --> N[Sovereign PII Redaction: Aadhaar / PAN / Phone]
     end
     
-    subgraph Storage & PII Security
-        C4 --> F[PII Redaction: Aadhaar / PAN / Phone]
-        C5 --> F
-        D5 --> F
-        F --> G[(SQLite FTS5 + WAL Mode)]
-    end
-    
-    subgraph Offline Search Engine
-        E --> H[Query Engine]
-        I[User Text Search] --> H
-        H --> J[Indian Synonym Expansion]
-        H --> K[Soundex Typo-Tolerant Matching]
-        H --> L[Multi-Word AND Matcher]
-        J --> M[Relevance Ranker & Snippet Highlighting]
-        K --> M
-        L --> M
-        G --> M
-        M --> N[Aurora Glassmorphism Results UI]
+    subgraph 3. SQLite Storage & Instant Retrieval
+        N --> O[(SQLite FTS5 + WAL Mode)]
+        P[User Query: Voice Whisper STT or Text] --> Q[Indian Synonym & Soundex Expansion]
+        Q --> R[FTS5 Full-Text Match in <12ms]
+        O --> R
+        R --> S[Relevance Ranking & Context Snippet Highlighting]
+        S --> T[Aurora Dark-Mode Results UI]
     end
 ```
 
----
+### 1. The Battery-Aware Vision Pipeline
+When you sync or scan an image, PinPointer doesn't blindly throw power-hungry neural networks at it:
+- **Smart Downsampling**: It resizes high-resolution camera photos down to an optimized 1024×1024 frame. This reduces OCR latency from seconds to **~180ms** while preserving crisp character legibility.
+- **Parallel Bilingual OCR**: It runs Google ML Kit Latin and Devanagari models simultaneously.
+- **The Early-Exit Breakthrough**: The instant clean text is identified, **the pipeline halts immediately**. It skips heavy multi-label object recognition on over 90% of documents. Your phone stays cool, GPU/NPU wakeups are prevented, and battery life is preserved.
+- **Noise Filtering**: OCR garbage from blurry photos or textures is caught by an alphanumeric ratio heuristic (<30% clean text is automatically rejected).
 
-## ⚙️ Technical Deep Dive
+### 2. The 5-Phase PDF Engine
+PDFs are notorious for being inconsistent. Some are digitally generated; others are camera photos wrapped in a PDF envelope. PinPointer treats them with a dedicated 5-phase pipeline:
+- **Native Byte Parsing**: For digital PDFs (bank statements, flight tickets, invoices), PinPointer parses the raw internal PDF text operators (`BT`...`ET`, `Tj`/`TJ`) directly in **~50ms per page** without ever rasterizing an image or invoking AI.
+- **Native Hardware Rasterization**: If a PDF is a scanned photocopy, Android's native `android.graphics.pdf.PdfRenderer` converts pages 1–3 into JPEGs and hands them to the vision pipeline.
 
-### 1. Battery-Aware Vision Pipeline ([`VisionPipeline.ts`](file:///c:/Users/pc/Downloads/Hackday%201.0/src/utils/VisionPipeline.ts))
-- **Dynamic Downsampling**: Resizes high-res images to 1024×1024 JPEG before inference; automatically purges temporary cache files after scanning.
-- **Parallel Latin + Devanagari OCR**: Uses lightweight on-device ML Kit models concurrently.
-- **Noise Rejection**: Heuristically discards OCR noise if clean alphanumeric/Devanagari characters make up <30% of output.
-- **90% Compute Bypass**: Halts immediately when clean text is present, avoiding expensive multi-label object classifiers on over 90% of documents.
+### 3. Turning Messy Files into Human Knowledge
+No user remembers what `DOC-20240918-WA0012.pdf` was. PinPointer runs a pure-JavaScript rule-based classifier in **<1ms**:
+- It recognizes **20 distinct Indian document categories** (Aadhaar cards, PAN cards, voter IDs, driving licenses, bank statements, salary slips, tax returns/Form 16, invoices, receipts, marksheets, electricity bills, medical reports, and more).
+- It extracts a **Smart Title**: that mysterious WhatsApp file is filed in your Document Vault as *"BSES Rajdhani Electricity Bill"* or *"HDFC Bank Statement"*.
 
-### 2. 5-Phase PDF Intelligence ([`DocumentPipeline.ts`](file:///c:/Users/pc/Downloads/Hackday%201.0/src/utils/DocumentPipeline.ts))
-- **Direct Byte-Stream Extraction**: Parses internal PDF content streams (`BT`...`ET`, `Tj`/`TJ`) for digital PDFs in **~50ms**, bypassing rasterization entirely.
-- **Native Android Rasterization**: Uses Android's native `android.graphics.pdf.PdfRenderer` to convert scanned document pages into JPEGs without third-party native bloat.
-- **Progressive Scanning**: Prioritizes pages 1–3 in the foreground for instant search feedback.
+### 4. Speaking the User's Language
+India is inherently multilingual:
+- **Deterministic Transliteration**: Devanagari characters are mapped into Romanized Hinglish phonetically (e.g., `"आधार"` → `"aadhaar"`, `"कमल"` → `"kamal"`).
+- **Concept Pairing**: The query engine understands Indian synonyms. If you type *"bijli"*, it knows to look for *"electric bill"*, *"power bill"*, and *"electricity"*. If you search *"salary"*, it pulls up *"payslip"* and *"CTC"*.
+- **Zero-LLM Overhead**: Everything is deterministic rule-based mapping—meaning zero hallucination, zero token cost, and instantaneous speed.
 
-### 3. Zero-Cost Document Classifier ([`DocumentClassifier.ts`](file:///c:/Users/pc/Downloads/Hackday%201.0/src/utils/DocumentClassifier.ts))
-- Classifies files into **20 Indian document categories** (Aadhaar, PAN, Voter ID, Driving License, Passport, Bank Statement, Salary Slip, Tax Return, Invoice, Receipt, Marksheet, Electricity Bill, Medical Report, etc.).
-- **Smart Title Generation**: Replaces unhelpful filenames (e.g. `DOC-20240918-WA0012.pdf` → *"SBI Bank Statement"* or *"BSES Electricity Bill"*). Runs in **<1ms** with zero ML overhead.
+### 5. Hands-Free On-Device Voice Intelligence
+Touch typing on mobile can be frustrating. PinPointer embeds a quantized INT8 Whisper Base speech-to-text model running via `sherpa-onnx` and native JNI bindings. 
+- You tap the microphone and say: *"Pichla bijli bill dikhao"* or *"Find my car insurance"*.
+- Your voice is captured as 16kHz PCM audio and transcribed locally on your processor in **~1.1 seconds** with zero Wi-Fi or cellular connection.
 
-### 4. Hybrid Offline Search Engine ([`Database.ts`](file:///c:/Users/pc/Downloads/Hackday%201.0/src/Database.ts))
-- **SQLite with WAL Mode**: Write-Ahead Logging enables non-blocking concurrent indexing while the user searches.
-- **FTS5 Virtual Table**: Full-Text Search with `unicode61` tokenizer and automated database update triggers.
-- **Synonym Expansion**: Connects aliases seamlessly (e.g., `aadhaar` ↔ `aadhar` ↔ `uidai`; `pan` ↔ `pancard`; `bijli` ↔ `electricity`).
-- **Phonetic Matching**: Soundex encoding provides typo tolerance for voice and text queries.
-- **Weighted Relevance Ranking**: Prioritizes title matches (+50 pts), exact phrase matches (+30 pts), and recency.
+### 6. Sovereign PII Masking (DPDP Act 2023)
+Before any text is written to the local database, it passes through an immutable redaction filter:
+- **Aadhaar**: `1234 5678 9012` → `****-****-9012`
+- **PAN**: `ABCDE1234F` → `ABCDE****F`
+- **Phone**: `9876543210` → `******3210`
+Sensitive national IDs are never stored in plain text, ensuring strict compliance with India's Digital Personal Data Protection Act.
 
-### 5. On-Device Voice Search ([`SherpaOnnxModule.kt`](file:///c:/Users/pc/Downloads/Hackday%201.0/android/app/src/main/java/ai/runanywhere/starter/SherpaOnnxModule.kt))
-- Uses native `sherpa-onnx` JNI runtime with an INT8-quantized Whisper model for offline speech recognition.
-- Captures 16kHz mono PCM audio directly into memory with zero internet dependency.
-
-### 6. Sovereign PII Masking ([`DataMasking.ts`](file:///c:/Users/pc/Downloads/Hackday%201.0/src/utils/DataMasking.ts))
-- Masks sensitive data before database insertion:
-  - Aadhaar: `****-****-9012`
-  - PAN: `ABCDE****F`
-  - Phone: `******3210`
-
----
-
-## ⏱️ Measured Latency Benchmarks
-
-| Metric / Operation | Tested Latency | Resource Footprint |
-|---|---|---|
-| **Digital PDF Text Extraction** | **~50 ms** / page | Minimal CPU |
-| **Camera / Scanned Document OCR** | **~180–280 ms** | Downsampled 1024px |
-| **Database FTS5 Query (50K records)** | **< 12 ms** | In-memory index |
-| **Offline Voice Transcription** | **~1.1 s** | INT8 Quantized Whisper |
-| **Document Classification & Smart Title** | **< 1 ms** | Zero-ML rule engine |
-| **Memory Consumption (Active Sync)** | **< 150 MB RAM** | Stream-based processing |
+### 7. Instant Hybrid Search in Under 12ms
+All enriched tokens, Soundex phonetic codes, and smart titles live in a local SQLite database configured with Write-Ahead Logging (WAL) and FTS5 (Full-Text Search). Even across a massive library of 50,000 documents, your queries return in **<12ms**, highlighting the exact snippet of text where the match occurred.
 
 ---
 
-## 📱 App Screens Overview
-
-- **Pinpointer Main Search** ([`PinpointerScreen.tsx`](file:///c:/Users/pc/Downloads/Hackday%201.0/src/screens/PinpointerScreen.tsx)): Aurora dark-mode interface, voice listening orb, search history with one-tap deletion, filter chips (`All`, `Photos`, `Documents`), and full-screen image preview with sharing & scanning shortcuts.
-- **Document Vault** ([`DocumentVaultScreen.tsx`](file:///c:/Users/pc/Downloads/Hackday%201.0/src/screens/DocumentVaultScreen.tsx)): Categorized view of all device PDFs with confidence scores, category badges, and instant opening in native viewers.
-- **Scan Images / Smart Clipboard** ([`SmartClipboardScreen.tsx`](file:///c:/Users/pc/Downloads/Hackday%201.0/src/screens/SmartClipboardScreen.tsx)): Camera and gallery OCR scanner with copy-to-clipboard, text editor, and scan history.
-- **Point & Speak** ([`PointAndSpeakScreen.tsx`](file:///c:/Users/pc/Downloads/Hackday%201.0/src/screens/PointAndSpeakScreen.tsx)): Point-and-shoot camera OCR with visual scanning radar.
-- **Speech to Text** ([`SpeechToTextScreen.tsx`](file:///c:/Users/pc/Downloads/Hackday%201.0/src/screens/SpeechToTextScreen.tsx)): Voice transcription playground with animated audio level bars.
-- **Recent Searches & Gallery** ([`gallery.tsx`](file:///c:/Users/pc/Downloads/Hackday%201.0/src/screens/gallery.tsx)): Time-filtered photo grid (*Today*, *Yesterday*, *Last Week*).
-
----
-
-## 📈 Scalability & Business Model
+## 🌍 Where This Matters in the Real World
 
 ```text
-       Cloud OCR (AWS / Google Vision)
-  Cost   ~ $1.50 / 1,000 pages
-   ▲                   /
-   │                  /  (Cost explodes with users)
-   │                 /
-   │                /
-   │               /
-   │  ───────────/────────────────────
-   │  PinPointer Edge: $0.00 / month flat
-   └──────────────────────────────────────► Scale (Millions of Pages)
+🏥 In Hospital Basements & Emergency Rooms
+   A family member needs a past cardiology prescription or blood group report. Cellular data 
+   is blocked by concrete walls. PinPointer searches and opens the prescription instantly.
+
+🌾 In Rural Banking, Field Work & Micro-Lending
+   A loan officer is verifying KYC documents, land records, or ration cards in a remote village 
+   with zero tower connectivity. Everything stays local, fast, and accessible.
+
+👴 For Parents & Elderly Users
+   Instead of struggling to navigate nested Android file managers and cryptic folder trees, 
+   they simply tap the microphone: "Pichla bijli bill dikhao."
+
+⚖️ For Privacy-Sensitive Professionals
+   Lawyers, doctors, chartered accountants, and journalists keep privileged client documents 
+   on their personal phones with 100% certainty that no third-party cloud server has a copy.
 ```
 
-- **$0 Server Infrastructure Cost**: Indexing and search run entirely on the user's hardware. Scaling from 1,000 to 10,000,000 users costs $0 in cloud OCR bills.
-- **B2B SDK Opportunity**: The offline document search and OCR pipeline can be packaged as an SDK for fintech, micro-lending, logistics, and field-agent apps.
-- **B2C Freemium**: Core offline search is free; premium features could include encrypted cross-device sync and selective cloud backup.
-- **Public & Governance Deployments**: Ideal for e-governance, healthcare camps, and rural public distribution systems.
+---
+
+## 📊 How PinPointer Compares
+
+| Dimension | Cloud AI (Vision APIs) | DigiLocker | Apple Intelligence | **PinPointer** |
+|---|:---:|:---:|:---:|:---:|
+| **Works 100% Offline** | ❌ Never | ❌ Requires Active Internet | ⚠️ Hybrid Cloud Fallback | ✅ **100% On-Device** |
+| **Where Data is Processed** | 3rd-Party Remote Cloud | Government Server | On-Device + Cloud | ✅ **Exclusively on Phone** |
+| **Low-End Hardware (3–4GB RAM)** | ⚠️ Heavy client app | ⚠️ Web-dependent | ❌ Requires Flagship A17+ | ✅ **Built for 3–4GB Android** |
+| **Hindi / Hinglish Context** | ⚠️ Generic OCR only | ❌ Exact text only | ⚠️ Limited Indian Context | ✅ **Built-in Transliteration & Synonyms** |
+| **Messy WhatsApp Photos & PDFs** | ⚠️ Manual file uploads | ❌ Official issued docs only | ⚠️ Photos only, ignores PDFs | ✅ **Auto-Scans & Auto-Classifies** |
+| **Unified Search Bar** | ❌ Fragmented | ❌ PDFs only | ⚠️ Siloed search | ✅ **One Search for Images + PDFs** |
+| **Cloud Server Bills** | 📈 ~$1.50 per 1K pages | N/A | High device premium | ✅ **$0.00 / month flat** |
 
 ---
 
-## 🗺️ Roadmap & What We're Building Next
+## ⏱️ Verified Performance Benchmarks
 
-- [x] **Phase 1 (Done — Current Release)**: Working Android APK with offline OCR, PDF stream parsing, FTS5 hybrid search, 20+ document classifiers, and offline Whisper voice search.
-- [ ] **Phase 2 — On-Device SLM**: Embed a small quantized 1.5B language model for local cross-document question answering (e.g. *"How much did I pay for electricity this year across all bills?"*).
-- [ ] **Phase 3 — Offline Mesh Sharing**: Peer-to-peer document sharing over Wi-Fi Direct and BLE for disaster zones and low-connectivity field operations.
-- [ ] **Phase 4 — Semantic Embeddings**: Pair a lightweight vector embedding model alongside FTS5 for conceptual matching (e.g., searching *"house repair"* matches a masonry quote).
-- [ ] **Phase 5 — Video OCR**: Index whiteboard slides and receipts captured inside recorded video clips.
+| Operation | Engine / Component | Measured Speed | Resource Footprint |
+|---|---|---|---|
+| **Digital PDF Text Extraction** | Byte-Stream Parser (`DocumentPipeline.ts`) | **~50 ms** / page | Minimal CPU, Zero AI |
+| **Scanned Document OCR** | Google ML Kit Latin + Devanagari | **~180–280 ms** | 1024px Downsampled Frame |
+| **FTS5 Full-Text Query (50K docs)** | SQLite 3 FTS5 with Unicode61 Tokenizer | **< 12 ms** | In-memory B-Tree index |
+| **Offline Voice Transcription** | Sherpa-ONNX Whisper Base (INT8) | **~1.1 s** | On-Device CPU/NPU |
+| **Document Classification & Title** | Deterministic Keyword Matcher | **< 1 ms** | Zero ML overhead |
+| **Active Sync Memory Usage** | Stream-based processing queue | **< 150 MB RAM** | Safe on 3GB–4GB RAM phones |
 
 ---
 
-## 💻 Local Setup & Development
+## 💻 Tech Stack & Key Libraries
+
+| Layer | Technology | Purpose in PinPointer |
+|---|---|---|
+| **Core Framework** | React Native `0.83.1` (React `19.2.0`, TypeScript `5.9.2`) | Cross-platform UI architecture and reactive state management |
+| **Local Database** | `react-native-quick-sqlite` | High-performance C-based SQLite 3 engine with FTS5 and WAL mode |
+| **Computer Vision** | `@react-native-ml-kit/text-recognition` | On-device OCR for Latin and Devanagari scripts |
+| **Object Recognition** | `@react-native-ml-kit/image-labeling` | Fallback scene labeling for photos with no readable text |
+| **Voice Intelligence** | `sherpa-onnx` 1.13.6 AAR (k2-fsa) | Embedded offline Whisper Base INT8 speech recognition via JNI |
+| **Native Android** | Kotlin & Java Native Modules | Hardware PDF rasterization (`PdfRenderer`), PCM audio capture, Intent launcher |
+| **Image Processing** | `react-native-image-resizer` | Dynamic downsampling to 1024px to accelerate OCR and protect RAM |
+| **Media Access** | `@react-native-camera-roll/camera-roll` | Local gallery querying and storage indexing |
+| **UI & Styling** | `@react-navigation/stack`, `react-native-linear-gradient`, `react-native-svg` | Aurora dark-mode glassmorphic interface, animated voice orb, and visual cards |
+
+---
+
+## 📂 Project Structure & Architecture
+
+```text
+Hackday-1.0/
+├── android/                                    # Native Android platform
+│   ├── app/
+│   │   ├── libs/                               # sherpa-onnx native AAR (v1.13.6)
+│   │   └── src/main/
+│   │       ├── assets/models/whisper/          # Bundled offline Whisper INT8 models
+│   │       └── java/ai/runanywhere/starter/
+│   │           ├── MainActivity.kt             # React Native main activity
+│   │           ├── MainApplication.kt          # Native package registrations
+│   │           ├── NativeAudioModule.kt        # 16-bit 16kHz PCM audio recorder
+│   │           ├── NativePdfModule.kt          # Native PdfRenderer rasterizer & metadata bridge
+│   │           ├── OCRModule.java              # ML Kit Devanagari text recognition wrapper
+│   │           ├── SherpaOnnxModule.kt         # Offline speech recognition via sherpa-onnx JNI
+│   │           └── StorageModule.java          # Asset unpacking & Intent-based PDF opener
+├── src/
+│   ├── assets/                                 # App logos and visual branding
+│   ├── components/                             # Reusable UI elements
+│   │   ├── AudioVisualizer.tsx                 # Real-time audio waveform bar visualizer
+│   │   ├── FeatureCard.tsx                     # Dashboard quick action cards
+│   │   ├── ModelDownloadSheet.tsx              # Model lifecycle management modal
+│   │   ├── ModelLoaderWidget.tsx               # Status indicator for local models
+│   │   ├── SearchFilterChips.tsx               # Filter pills ('All', 'Photos', 'Documents')
+│   │   ├── SearchHistoryPanel.tsx              # Search suggestions with delete & clear all
+│   │   └── SyncProgressCard.tsx                # Animated syncing progress bar & shield badge
+│   ├── hooks/                                  # React custom hooks & context
+│   │   ├── PinpointerContext.tsx               # Global search, sync, and application state
+│   │   ├── useDocumentSync.ts                  # Background PDF discovery and indexing
+│   │   ├── useGallerySync.ts                   # CameraRoll scanner with pause/resume support
+│   │   ├── usePinpointer.ts                    # Main controller hook
+│   │   ├── useSearch.ts                        # Debounced search and ranking dispatcher
+│   │   └── useVoiceRecording.ts                # Sherpa-ONNX microphone listener
+│   ├── navigation/                             # App navigation & route parameters
+│   │   └── types.ts                            # RootStackParamList definitions
+│   ├── screens/                                # Application views
+│   │   ├── DocumentVaultScreen.tsx             # 20-category organized document repository
+│   │   ├── gallery.tsx                         # Time-filtered recent photos & media viewer
+│   │   ├── HomeScreen.tsx                      # Drawer menu & sync trigger dashboard
+│   │   ├── PinpointerScreen.tsx                # Main search interface, voice orb & results list
+│   │   ├── PointAndSpeakScreen.tsx             # Point-and-shoot camera OCR utility
+│   │   ├── SmartClipboardScreen.tsx            # OCR text scanner, clipboard editor & history
+│   │   └── SpeechToTextScreen.tsx              # Dedicated offline voice transcription testbed
+│   ├── services/                               # Service providers
+│   │   └── ModelService.tsx                    # Background model management
+│   ├── theme/                                  # Design system tokens
+│   │   ├── colors.ts                           # Aurora dark-mode palette & accents
+│   │   └── index.ts                            # Theme exports
+│   ├── utils/                                  # Core algorithmic pipelines
+│   │   ├── AppLogger.ts                        # Structured application logger
+│   │   ├── DataMasking.ts                      # DPDP 2023 PII redaction (Aadhaar, PAN, phone)
+│   │   ├── DocumentClassifier.ts               # Zero-cost 20-category classifier & smart titles
+│   │   ├── DocumentPipeline.ts                 # 5-phase PDF intelligence pipeline
+│   │   ├── GallerySync.ts                      # Image batch scanner & thumbnail generator
+│   │   ├── HindiTranslit.ts                    # Deterministic Devanagari to Hinglish transliterator
+│   │   ├── RecentPhotos.ts                     # Local recent photo cache
+│   │   ├── SearchHistory.ts                    # Persistent local search history
+│   │   ├── Soundex.ts                          # Typo-tolerant phonetic encoding algorithm
+│   │   ├── TextEnrichment.ts                   # Multilingual index builder
+│   │   └── VisionPipeline.ts                   # Downsampling, dual OCR, and early-exit logic
+│   ├── App.tsx                                 # Root application container & stack navigator
+│   └── Database.ts                             # SQLite FTS5 database, triggers & ranking engine
+├── download-models.js                          # Build-time script to fetch sherpa-onnx AAR & models
+├── package.json                                # Project dependencies and scripts
+└── tsconfig.json                               # TypeScript configuration
+```
+
+---
+
+## 🗺️ What We're Building Next
+
+- [x] **Phase 1 (Working Today)**: Production-ready Android APK with 100% offline OCR, 5-phase PDF parsing, 20-category auto-classification, FTS5 hybrid search, and offline Whisper voice input.
+- [ ] **Phase 2 — On-Device SLM**: Embed a compact, quantized 1.5B model to answer questions across your personal documents offline (*"What was the total amount I paid in electricity bills across all houses this year?"*).
+- [ ] **Phase 3 — Offline Mesh Sharing**: Peer-to-peer document sharing over Wi-Fi Direct and BLE for disaster zones, rescue operations, and remote field deployments.
+- [ ] **Phase 4 — Semantic Search**: Pair lightweight on-device vector embeddings alongside FTS5 for conceptual search (*"house repair"* matches a masonry contractor invoice).
+- [ ] **Phase 5 — Video Frame OCR**: Index presentation slides, whiteboards, and receipts captured inside recorded video clips.
+
+---
+
+## 🛠️ Local Setup & Building from Source
 
 ### Prerequisites
 - **Node.js**: `v18+`
 - **JDK**: Java 17 or Java 11
-- **Android SDK**: API 29+ (compiles on SDK 35)
+- **Android SDK**: API 29+ (compiles against SDK 35)
+- **Physical Device or Android Emulator** with camera and microphone permissions enabled
 
 ### Steps
 
@@ -265,17 +318,18 @@ graph TD
    cd Hackday-1.0
    ```
 
-2. **Install dependencies** (automatically fetches sherpa-onnx AAR and Whisper models via `postinstall`):
+2. **Install dependencies**:
    ```bash
    npm install
    ```
+   > *The `postinstall` script automatically applies local patches and runs `download-models.js` to download the native `sherpa-onnx` AAR into `android/app/libs` and the quantized Whisper model into `android/app/src/main/assets/models/`.*
 
 3. **Start the Metro bundler**:
    ```bash
    npm start
    ```
 
-4. **Build and run on Android**:
+4. **Launch the application on Android**:
    ```bash
    npx react-native run-android
    ```
@@ -283,5 +337,5 @@ graph TD
 ---
 
 <div align="center">
-  <sub><strong>PinPointer</strong> — Built for privacy, zero cloud bills, and instant offline discovery.</sub>
+  <sub><strong>PinPointer</strong> — Indexed. Offline. Yours.</sub>
 </div>
